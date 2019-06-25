@@ -2,3 +2,7 @@ elpa/
 *~
 *.data
 auto-save-list/
+.recentf
+.smex-items
+ido.last
+*.eld

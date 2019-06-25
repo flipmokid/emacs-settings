@@ -3,9 +3,6 @@
 (add-to-list 
   'package-archives
   '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-;(add-to-list
-; 'package-archives
-; '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
 (package-initialize)
 
@@ -13,8 +10,10 @@
   (package-refresh-contents))
 
 (defvar my-packages '(
+  use-package
   paredit
   clojure-mode
+  clojure-mode-extra-font-locking
   cider
 ;  ido-everywhere
   ido-completing-read+
@@ -29,11 +28,18 @@
   hydra
   ace-window
   avy
-  doom-themes))
-
-;(if (eq system-type 'darwin)
-;    (add-to-list 'my-packages 'exec-path-from-shell) ;)
+  doom-themes
+  doom-modeline
+  exec-path-from-shell))
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+
+;; This is only needed once, near the top of the file
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (add-to-list 'load-path "<path where use-package is installed>")
+  (require 'use-package))
+

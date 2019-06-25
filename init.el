@@ -2,7 +2,14 @@
 
 (load "packages.el")
 (load "theme.el")
-(load "modeline.el")
+(load "navigation.el")  ;; from Clojure for the Brave 
+(load "ui.el")
+(load "configurations.el")
+(load "elisp-editing.el")
+(load "modeline.el")    ;; doom mode line config
+(load "clojure-editing.el")
+(load "javascript-editing.el")
+(load "keyboard.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
