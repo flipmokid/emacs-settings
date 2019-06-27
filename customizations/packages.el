@@ -30,12 +30,18 @@
   avy
   doom-themes
   doom-modeline
-  exec-path-from-shell))
+  exec-path-from-shell
+  ;neotree
+  treemacs
+  minions))
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
+;(require 'neotree)
+;(global-set-key [f8] 'neotree-toggle)
+;(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
 
 ;; This is only needed once, near the top of the file
 (eval-when-compile

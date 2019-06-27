@@ -6,3 +6,7 @@ auto-save-list/
 .smex-items
 ido.last
 *.eld
+*#
+.cache/
+cider-history
+eshell/

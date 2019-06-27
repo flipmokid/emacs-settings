@@ -10,11 +10,15 @@
                 (lambda () (interactive) (delete-window)))
 (global-set-key [(hyper z)] 'undo)
 
+(global-set-key [(hyper o)] 'ace-window)
+(global-set-key [(hyper f)] 'avy-goto-char-timer)
+
 ;; macports - switch meta key
 (defun mac-switch-meta nil 
   "switch meta back to options"
   (interactive)
-  (setq mac-option-modifier 'meta)
-  (setq mac-command-modifier 'hyper))
+  (setq mac-command-modifier 'hyper
+	mac-option-key-is-meta t
+	mac-right-option-modifier nil))
 
 (mac-switch-meta)

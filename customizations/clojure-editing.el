@@ -5,6 +5,10 @@
 ;; Java classes (e.g. JavaClassName)
 (add-hook 'clojure-mode-hook 'subword-mode)
 
+(add-hook 'clojure-mode-hook 'show-paren-mode)
+
+(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+
 ;; A little more syntax highlighting
 (require 'clojure-mode-extra-font-locking)
 
@@ -30,6 +34,9 @@
 
 ;; enable paredit in your REPL
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook 'subword-mode)
+(add-hook 'cider-repl-mode-hook 'show-paren-mode)
+(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
 
 ;; Use clojure mode for other extensions
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
