@@ -18,7 +18,9 @@
   "switch meta back to options"
   (interactive)
   (setq mac-command-modifier 'hyper
-	mac-option-key-is-meta t
-	mac-right-option-modifier nil))
+	mac-option-modifier 'meta
+	;mac-option-key-is-meta t
+	;mac-right-option-modifier nil
+	))
 
 (mac-switch-meta)

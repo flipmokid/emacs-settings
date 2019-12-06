@@ -33,7 +33,11 @@
   exec-path-from-shell
   ;neotree
   treemacs
-  minions))
+  minions
+  yasnippet
+  lsp-mode
+  lsp-ui
+  fsharp-mode))
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
