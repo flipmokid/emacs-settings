@@ -10,3 +10,9 @@ ido.last
 .cache/
 cider-history
 eshell/
+fsautocomplete/
+url/
+recentf
+ac-comphist.data
+README.el
+.*
