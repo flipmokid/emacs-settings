@@ -320,8 +320,10 @@ You can just type something like =ns= and =TAB= and it'll populate it automatica
 (use-package ivy
   :ensure t
   :diminish (ivy-mode)
-  :bind (("C-x b" . ivy-switch-buffer))
+  :bind (("C-x b" . ivy-switch-buffer)
+         ("C-x C-b" . 'ibuffer))
   :config
+  (setq ivy-use-virtual-buffers t)
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-display-style 'fancy))
