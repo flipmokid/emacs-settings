@@ -72,6 +72,7 @@ Pretty much the ultimate theme for Emacs. [[https://github.com/hlissner/doom-ema
   (fset 'yes-or-no-p 'y-or-n-p)
   ;; Newline at end of file
   (setq require-final-newline t)
+  (show-paren-mode 1) ;; highlight matching parens
   ;; Wrap lines at 80 characters
   (setq-default fill-column 80)
   (setq-default indent-tabs-mode nil)   ;; don't use tabs to indent
