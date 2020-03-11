@@ -48,8 +48,9 @@ We use =package= to solely install =use-package= which is used for the rest of o
 #+BEGIN_SRC emacs-lisp
 (use-package all-the-icons 
   :ensure t
-  :config
-  (all-the-icons-install-fonts))
+  :init
+    (unless (member "all-the-icons" (font-family-list))
+    (all-the-icons-install-fonts t)))
 #+END_SRC
 
 ** Doom Themes
@@ -407,6 +408,25 @@ Not currently on Melpa Stable
 ;  :ensure t)
 #+END_SRC
 
+** EJC-SQL (SQL Client)
+#+BEGIN_SRC emacs-lisp
+(use-package ejc-sql
+  :ensure t
+  :config
+  (require 'ejc-sql))
+#+END_SRC
+
+** Expand Region
+
+Let's you semantically expand/contract highlighted regions.
+
+#+BEGIN_SRC emacs-lisp
+(use-package expand-region
+  :ensure t
+  :bind (("C--" . 'er/contract-region) 
+         ("C-=" . 'er/expand-region)))
+#+END_SRC
+
 * Keyboard Changes
 
 Here we describe our keyboard changes. We add a lot of =Hyper= (Command) combos to give us access to common keybindings for cut, copy, paste, save etc.
@@ -449,3 +469,14 @@ By default the =Meta= key is bound to Command which is annoying for me. I far pr
 (require 'cider)
 #+END_SRC
 
+* Mac Enhancements
+
+** Use Spotlight for locate
+
+#+BEGIN_SRC emacs-lisp
+(if (eq system-type 'darwin)
+  (do 
+    (defun mlm/locate-make-command-line (search-string)
+      (list "mdfind" "-interpret" search-string))
+    (setq locate-make-command-line 'mlm/locate-make-command-line)))
+#+END_SRC
