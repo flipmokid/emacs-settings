@@ -16,6 +16,10 @@ Firstly we imported =package= and setup our package repositories, in this case /
   'package-archives
   '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
+(add-to-list
+  'package-archives
+  '("melpa" . "https://melpa.org/packages/") t)
+
 (package-initialize)
 #+END_SRC
 
@@ -30,6 +34,9 @@ We use =package= to solely install =use-package= which is used for the rest of o
 
 (require 'use-package)
 #+END_SRC
+
+#+RESULTS:
+: use-package
 
 * Packages
 
@@ -199,6 +206,15 @@ Color code things like brackets. [[https://github.com/Fanael/rainbow-delimiters]
 (use-package multiple-cursors :ensure t)
 #+END_SRC
 
+** CLJ Kondo
+
+Syntax checker for Clojure.
+
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck-clj-kondo
+  :ensure t)  
+#+END_SRC
+
 ** Clojure Mode
 
 [[https://github.com/clojure-emacs/clojure-mode][Clojure Mode]] provides language support for the Clojure programming language.
@@ -210,7 +226,8 @@ Color code things like brackets. [[https://github.com/Fanael/rainbow-delimiters]
   (add-hook 'clojure-mode-hook #'eldoc-mode)
   (add-hook 'clojure-mode-hook #'paredit-mode)
   (add-hook 'clojure-mode-hook #'subword-mode)
-  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+  (require 'flycheck-clj-kondo))
 #+END_SRC
 
 ** Cider
@@ -416,6 +433,24 @@ Not currently on Melpa Stable
   (require 'ejc-sql))
 #+END_SRC
 
+** Restclient
+
+Make REST calls in a buffer
+
+#+BEGIN_SRC emacs-lisp
+(use-package restclient
+  :ensure t)
+#+END_SRC
+
+** Javap Mode
+
+View Java class files decompiled.
+
+#+BEGIN_SRC emacs-lisp
+(use-package javap-mode
+  :ensure t)
+#+END_SRC
+
 ** Expand Region
 
 Let's you semantically expand/contract highlighted regions.
@@ -459,6 +494,20 @@ By default the =Meta= key is bound to Command which is annoying for me. I far pr
 (mac-switch-meta)
 #+END_SRC
 
+* Terraform
+
+Terraform completions via company mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package terraform-mode :ensure t)
+
+(use-package company-terraform
+  :ensure t
+  :config (company-terraform-init))
+#+END_SRC
+
+#+RESULTS:
+: t
 
 * Org Enhancements
 
