@@ -35,10 +35,18 @@ We use =package= to solely install =use-package= which is used for the rest of o
 (require 'use-package)
 #+END_SRC
 
-#+RESULTS:
-: use-package
-
 * Packages
+
+** exec-path-from-shell
+
+Copies important environment variables to Emacs when running under GUI mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell :ensure t
+:init
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize)))
+#+END_SRC
 
 ** Try 
 
@@ -59,6 +67,19 @@ We use =package= to solely install =use-package= which is used for the rest of o
     (unless (member "all-the-icons" (font-family-list))
     (all-the-icons-install-fonts t)))
 #+END_SRC
+
+** Neotree
+
+#+BEGIN_SRC emacs-lisp
+(use-package neotree
+  :ensure t
+  :config (require 'neotree) 
+  :init (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  :bind ("<f8>" . neotree-toggle))
+#+END_SRC
+
+#+RESULTS:
+: neotree-toggle
 
 ** Doom Themes
 
@@ -99,13 +120,16 @@ Pretty much the ultimate theme for Emacs. [[https://github.com/hlissner/doom-ema
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   ;(doom-themes-neotree-config)
   ;; or for treemacs users
-  (doom-themes-treemacs-config)
+  ;;(doom-themes-treemacs-config)
   (when (fboundp 'scroll-bar-mode) ;; don't show emacs scroll bars when graphical
     (scroll-bar-mode -1))
   ;; Corrects (and improves) org-mode's native fontification.
   ;; (doom-themes-org-config)
   )
 #+END_SRC
+
+#+RESULTS:
+: t
 
 ** Doom Modeline
 
@@ -515,8 +539,71 @@ Terraform completions via company mode.
 (require 'org)
 (require 'ob-clojure)
 (setq org-babel-clojure-backend 'cider)
+(add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((dot . t)))
+(defun my/fix-inline-images ()
+  (when org-inline-image-overlays
+    (org-redisplay-inline-images)))
+
+(add-hook 'org-babel-after-execute-hook 'my/fix-inline-images)
+
+(defun my-org-confirm-babel-evaluate (lang body)
+  (not (string= lang "dot")))  ;don't ask for ditaa
+(setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
+
 (require 'cider)
 #+END_SRC
+
+Enable export of HTML with inline images
+
+#+BEGIN_SRC emacs-lisp
+(defun org-html-export-to-mhtml (async subtree visible body)
+  (cl-letf (((symbol-function 'org-html--format-image) 'format-image-inline))
+    (org-html-export-to-html nil subtree visible body)))
+
+(defun format-image-inline (source attributes info)
+  (let* ((ext (file-name-extension source))
+         (prefix (if (string= "svg" ext) "data:image/svg+xml;base64," "data:;base64,"))
+         (data (with-temp-buffer (url-insert-file-contents source) (buffer-string)))
+         (data-url (concat prefix (base64-encode-string data)))
+         (attributes (org-combine-plists `(:src ,data-url) attributes)))
+    (org-html-close-tag "img" (org-html--make-attribute-string attributes) info)))
+
+(org-export-define-derived-backend 'html-inline-images 'html
+  :menu-entry '(?h "Export to HTML" ((?m "As MHTML file and open" org-html-export-to-mhtml))))
+#+END_SRC
+
+<s and other org-tempo improvements
+
+#+BEGIN_SRC emacs-lisp
+(require 'org-tempo)
+#+END_SRC
+
+* Highlight todo, fixme, debug etc
+
+#+BEGIN_SRC emacs-lisp
+(use-package hl-todo
+  :ensure t
+  :config (global-hl-todo-mode))
+#+END_SRC
+
+Be sure to add this to .zshrc
+
+#+begin_src sh :noeval
+vterm_printf(){
+    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+        # Tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
+#+end_src
 
 * Mac Enhancements
 
@@ -528,4 +615,17 @@ Terraform completions via company mode.
     (defun mlm/locate-make-command-line (search-string)
       (list "mdfind" "-interpret" search-string))
     (setq locate-make-command-line 'mlm/locate-make-command-line)))
+#+END_SRC
+
+* Vterm
+
+  #+begin_src emacs-lisp
+  (use-package vterm
+    :ensure t)
+  #+end_src
+
+* Other
+** JS Indent
+#+BEGIN_SRC emacs-lisp
+(setq js-indent-level 2)
 #+END_SRC
