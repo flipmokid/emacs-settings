@@ -157,8 +157,13 @@ Pretty much the ultimate theme for Emacs. [[https://github.com/hlissner/doom-ema
 #+BEGIN_SRC emacs-lisp
 (use-package projectile 
   :ensure t
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
   :config
-  (projectile-mode 1))
+  (projectile-mode 1)
+  :init
+  (when (file-directory-p "~/Documents/code/artis-works")
+    (setq projectile-project-search-path '("~/Documents/code/artis-works"))))
 #+END_SRC
 
 ** Which Key
@@ -366,7 +371,7 @@ You can just type something like =ns= and =TAB= and it'll populate it automatica
 (use-package ivy
   :ensure t
   :diminish (ivy-mode)
-  :bind (("C-x b" . ivy-switch-buffer)
+  :bind (
          ("C-x C-b" . 'ibuffer))
   :config
   (setq ivy-use-virtual-buffers t)
@@ -375,6 +380,9 @@ You can just type something like =ns= and =TAB= and it'll populate it automatica
   (global-set-key (kbd "C-c V") 'ivy-pop-view)
   (setq ivy-display-style 'fancy))
 #+END_SRC
+
+#+RESULTS:
+: ibuffer
 
 We also add [[https://github.com/asok/all-the-icons-ivy][All The Icons Ivy]] to add file icons in Ivy buffers.
 
@@ -396,6 +404,14 @@ We also add [[https://github.com/asok/all-the-icons-ivy][All The Icons Ivy]] to 
   (global-set-key "\C-s" 'swiper))
 #+END_SRC
 
+** Ivy Rich
+
+#+BEGIN_SRC emacs-lisp
+(use-package ivy-rich
+  :ensure t
+  :init (ivy-rich-mode 1))
+#+END_SRC
+
 ** Counsel
 
 [[https://oremacs.com/2015/04/09/counsel-completion/][Counsel]] is in the same codebase as Ivy and Swiper. We use it to override the default =M-x= binding.
@@ -415,8 +431,16 @@ We also add [[https://github.com/asok/all-the-icons-ivy][All The Icons Ivy]] to 
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
   (global-set-key (kbd "C-c a") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-x b") 'counsel-ibuffer)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 #+END_SRC
+
+#+begin_src emacs-lisp
+(use-package counsel-projectile
+  :ensure t
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config (counsel-projectile-mode))
+#+end_src
 
 ** Company
 
@@ -578,7 +602,7 @@ Enable export of HTML with inline images
 <s and other org-tempo improvements
 
 #+BEGIN_SRC emacs-lisp
-(require 'org-tempo)
+(use-package org-tempo :ensure t)
 #+END_SRC
 
 * Highlight todo, fixme, debug etc
@@ -623,6 +647,14 @@ vterm_printf(){
   (use-package vterm
     :ensure t)
   #+end_src
+
+* Fountain Mode
+
+Fountain mode for writing scripts and lyrics
+
+#+begin_src emacs-lisp
+(use-package fountain-mode :ensure t)
+#+end_src
 
 * Other
 ** JS Indent
